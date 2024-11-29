@@ -3,7 +3,9 @@ package cache
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"os"
+	"strconv"
 
 	"github.com/Kpatoc452/Dceorator/models"
 	"github.com/redis/go-redis/v9"
@@ -29,16 +31,23 @@ func NewRedis() *redisCache{
 
 
 func(r *redisCache) Get(id int) (models.Info, error) {
-	val, err := r.rds.Get(context.Background(),  string(id)).Result()
+	var info models.Info
+	val, err := r.rds.Get(context.Background(),  strconv.Itoa(id)).Result()
     if err != nil {
-        
+        return info, err
     } else {
-		var info models.Info
-		err = json.Unmarshal([]byte(val), info)
+		err = json.Unmarshal([]byte(val), &info)
 		return info, err
 	}
-
 }
 
-
+func(r *redisCache) set(id int, info models.Info) error { 
+	info_b, err := json.Marshal(info)
+	if err != nil{
+		log.Println("Redis. Cannot to SET data.")
+		return err
+	}
+	err = r.rds.Set(context.Background(), strconv.Itoa(id), info_b, 0).Err()
+	return err
+}
 

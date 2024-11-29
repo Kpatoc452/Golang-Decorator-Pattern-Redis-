@@ -6,6 +6,7 @@ import (
 
 	// "github.com/jackc/pgx/v5"
 	// "github.com/joho/godotenv"
+
 	"github.com/redis/go-redis/v9"
 )
 
@@ -49,13 +50,13 @@ func ExampleClient() {
 
 // 	dbURL := os.Getenv("DATABASE_URL")
 	
-// 	conn, err := pgx.Connect(ctx, dbURL)
+
 // 	if err != nil {
 // 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 // 		os.Exit(1)
 // 	}
 // 	defer conn.Close(ctx)
-
+//conn, err := pgx.Connect(ctx, dbURL)
 
 // 	_, err = conn.Exec(ctx, "INSERT INTO persons (firsName, lastName, city) VALUES($1, $2, $3)", "denis", "gatilov", "orel")
 // 	if err != nil{
@@ -65,6 +66,8 @@ func ExampleClient() {
 // }
 
 func main(){
-	ExampleClient()
-	// ExampleClientPSQL()
+
 }
+
+
+
