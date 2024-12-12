@@ -1,4 +1,4 @@
-package cache
+package redis
 
 import (
 	"context"
@@ -20,7 +20,7 @@ type redisCache struct {
 	rds *redis.Client
 }
 
-func NewRedis() *redisCache{
+func New() *redisCache{
 	return &redisCache{
 		rds: redis.NewClient(&redis.Options{
 			Addr: os.Getenv("REDIS_ADDR"),
@@ -29,14 +29,17 @@ func NewRedis() *redisCache{
 	}
 }
 
-
 func(r *redisCache) Get(id int) (models.Info, error) {
 	var info models.Info
 	val, err := r.rds.Get(context.Background(),  strconv.Itoa(id)).Result()
     if err != nil {
+		log.Println("Redis Get. Error")
         return info, err
     } else {
 		err = json.Unmarshal([]byte(val), &info)
+		if err != nil{ 
+			log.Println("json unmrarshall. Error")
+		}
 		return info, err
 	}
 }
